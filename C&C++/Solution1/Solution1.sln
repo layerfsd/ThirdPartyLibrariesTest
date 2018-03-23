@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLite3Lib", "SQLite3Lib\SQLite3Lib.vcproj", "{A2447DB0-9C8D-4D2A-A6D9-9D95C9BB8E39}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLiteDataRecovery", "SQLiteDataRecovery\SQLiteDataRecovery.vcproj", "{3D8A71F6-2D42-4F20-96A5-EE5B883F0506}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3D4EFF44-692D-4DDC-B587-7DD510FA846B} = {3D4EFF44-692D-4DDC-B587-7DD510FA846B}
+		{A2447DB0-9C8D-4D2A-A6D9-9D95C9BB8E39} = {A2447DB0-9C8D-4D2A-A6D9-9D95C9BB8E39}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.vcproj", "{C9A3BBB3-1CA0-432C-BCC0-678AA01F755D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WeixinParser", "WeixinParser\WeixinParser.vcproj", "{F7612498-C05B-49EA-9A1B-C79820F0FDD2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3D8A71F6-2D42-4F20-96A5-EE5B883F0506} = {3D8A71F6-2D42-4F20-96A5-EE5B883F0506}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLite3Dll", "SQLite3Dll\SQLite3Dll.vcproj", "{3D4EFF44-692D-4DDC-B587-7DD510FA846B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleApplication2", "ConsoleApplication2\ConsoleApplication2.vcproj", "{FFE6A2FC-41EA-49AE-9D7A-49A1107359E2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QQParser", "QQParser\QQParser.vcproj", "{E295D510-CB6B-4464-B5D2-0EE64EAA9444}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A2447DB0-9C8D-4D2A-A6D9-9D95C9BB8E39}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A2447DB0-9C8D-4D2A-A6D9-9D95C9BB8E39}.Debug|Win32.Build.0 = Debug|Win32
+		{A2447DB0-9C8D-4D2A-A6D9-9D95C9BB8E39}.Release|Win32.ActiveCfg = Release|Win32
+		{A2447DB0-9C8D-4D2A-A6D9-9D95C9BB8E39}.Release|Win32.Build.0 = Release|Win32
+		{3D8A71F6-2D42-4F20-96A5-EE5B883F0506}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3D8A71F6-2D42-4F20-96A5-EE5B883F0506}.Debug|Win32.Build.0 = Debug|Win32
+		{3D8A71F6-2D42-4F20-96A5-EE5B883F0506}.Release|Win32.ActiveCfg = Release|Win32
+		{3D8A71F6-2D42-4F20-96A5-EE5B883F0506}.Release|Win32.Build.0 = Release|Win32
+		{C9A3BBB3-1CA0-432C-BCC0-678AA01F755D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C9A3BBB3-1CA0-432C-BCC0-678AA01F755D}.Debug|Win32.Build.0 = Debug|Win32
+		{C9A3BBB3-1CA0-432C-BCC0-678AA01F755D}.Release|Win32.ActiveCfg = Release|Win32
+		{C9A3BBB3-1CA0-432C-BCC0-678AA01F755D}.Release|Win32.Build.0 = Release|Win32
+		{F7612498-C05B-49EA-9A1B-C79820F0FDD2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F7612498-C05B-49EA-9A1B-C79820F0FDD2}.Debug|Win32.Build.0 = Debug|Win32
+		{F7612498-C05B-49EA-9A1B-C79820F0FDD2}.Release|Win32.ActiveCfg = Release|Win32
+		{F7612498-C05B-49EA-9A1B-C79820F0FDD2}.Release|Win32.Build.0 = Release|Win32
+		{3D4EFF44-692D-4DDC-B587-7DD510FA846B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3D4EFF44-692D-4DDC-B587-7DD510FA846B}.Debug|Win32.Build.0 = Debug|Win32
+		{3D4EFF44-692D-4DDC-B587-7DD510FA846B}.Release|Win32.ActiveCfg = Release|Win32
+		{3D4EFF44-692D-4DDC-B587-7DD510FA846B}.Release|Win32.Build.0 = Release|Win32
+		{FFE6A2FC-41EA-49AE-9D7A-49A1107359E2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FFE6A2FC-41EA-49AE-9D7A-49A1107359E2}.Debug|Win32.Build.0 = Debug|Win32
+		{FFE6A2FC-41EA-49AE-9D7A-49A1107359E2}.Release|Win32.ActiveCfg = Release|Win32
+		{FFE6A2FC-41EA-49AE-9D7A-49A1107359E2}.Release|Win32.Build.0 = Release|Win32
+		{E295D510-CB6B-4464-B5D2-0EE64EAA9444}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E295D510-CB6B-4464-B5D2-0EE64EAA9444}.Debug|Win32.Build.0 = Debug|Win32
+		{E295D510-CB6B-4464-B5D2-0EE64EAA9444}.Release|Win32.ActiveCfg = Release|Win32
+		{E295D510-CB6B-4464-B5D2-0EE64EAA9444}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
