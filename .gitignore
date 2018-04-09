@@ -1,3 +1,15 @@
+#过滤文件
+Debug
+Release
+*.ncb
+*.suo
+*.user
+*.vcxproj.filters
+*.vcxproj.user
+*.ipch
+*.VC.db
+UpgradeLog.htm
+
 #保留文件
 !/C&C++/Solution1/Debug/jre/
 !/C&C++/Solution1/Debug/7z.dll
@@ -9,10 +21,3 @@
 !/C&C++/Solution1/Release/7z.exe
 !/C&C++/Solution1/Release/pthreadVC2.dll
 !/C&C++/Solution1/Release/zlib1.dll
-
-#过滤文件
-Debug
-Release
-*.ncb
-*.suo
-*.user
