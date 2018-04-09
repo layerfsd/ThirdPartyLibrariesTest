@@ -382,11 +382,11 @@ inline void ConvertSizeToString(UINT64 u64Size, LPWSTR lpwzString)
 
 	if(0 == u64Size)
 	{
-		swprintf(lpwzString, L"%d B", u64Size);
+		swprintf(lpwzString, L"%lld B", u64Size);
 	}
 	else if (u64Size < 1024)
 	{
-		swprintf(lpwzString, L"%d B", u64Size);
+		swprintf(lpwzString, L"%lld B", u64Size);
 	}
 	else if (u64Size < 1024 * 1024)
 	{

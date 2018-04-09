@@ -1,26 +1,21 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLite3Lib", "SQLite3Lib\SQLite3Lib.vcproj", "{A2447DB0-9C8D-4D2A-A6D9-9D95C9BB8E39}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLite3Lib", "SQLite3Lib\SQLite3Lib.vcxproj", "{A2447DB0-9C8D-4D2A-A6D9-9D95C9BB8E39}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLiteDataRecovery", "SQLiteDataRecovery\SQLiteDataRecovery.vcproj", "{3D8A71F6-2D42-4F20-96A5-EE5B883F0506}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3D4EFF44-692D-4DDC-B587-7DD510FA846B} = {3D4EFF44-692D-4DDC-B587-7DD510FA846B}
-		{A2447DB0-9C8D-4D2A-A6D9-9D95C9BB8E39} = {A2447DB0-9C8D-4D2A-A6D9-9D95C9BB8E39}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLiteDataRecovery", "SQLiteDataRecovery\SQLiteDataRecovery.vcxproj", "{3D8A71F6-2D42-4F20-96A5-EE5B883F0506}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.vcproj", "{C9A3BBB3-1CA0-432C-BCC0-678AA01F755D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.vcxproj", "{C9A3BBB3-1CA0-432C-BCC0-678AA01F755D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WeixinParser", "WeixinParser\WeixinParser.vcproj", "{F7612498-C05B-49EA-9A1B-C79820F0FDD2}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3D8A71F6-2D42-4F20-96A5-EE5B883F0506} = {3D8A71F6-2D42-4F20-96A5-EE5B883F0506}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WeixinParser", "WeixinParser\WeixinParser.vcxproj", "{F7612498-C05B-49EA-9A1B-C79820F0FDD2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLite3Dll", "SQLite3Dll\SQLite3Dll.vcproj", "{3D4EFF44-692D-4DDC-B587-7DD510FA846B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLite3Dll", "SQLite3Dll\SQLite3Dll.vcxproj", "{3D4EFF44-692D-4DDC-B587-7DD510FA846B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleApplication2", "ConsoleApplication2\ConsoleApplication2.vcproj", "{FFE6A2FC-41EA-49AE-9D7A-49A1107359E2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleApplication2", "ConsoleApplication2\ConsoleApplication2.vcxproj", "{FFE6A2FC-41EA-49AE-9D7A-49A1107359E2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QQParser", "QQParser\QQParser.vcproj", "{E295D510-CB6B-4464-B5D2-0EE64EAA9444}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QQParser", "QQParser\QQParser.vcxproj", "{E295D510-CB6B-4464-B5D2-0EE64EAA9444}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,5 +54,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {61880509-04DF-48C2-A730-DBF8E0B62701}
 	EndGlobalSection
 EndGlobal
