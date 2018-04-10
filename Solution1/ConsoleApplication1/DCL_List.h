@@ -8,9 +8,9 @@
 // Doubly Circular linked list
 struct DCL_List
 {
-	DCL_List* prev;
-	DCL_List* next;
-	int data;
+    DCL_List* prev;
+    DCL_List* next;
+    int data;
 };
 
 

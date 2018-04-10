@@ -8,8 +8,8 @@
 // Singly linked list
 struct SL_List
 {
-	SL_List* next;
-	int data;
+    SL_List* next;
+    int data;
 };
 
 
