@@ -101,10 +101,14 @@
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
     </ClCompile>
+    <ClCompile Include="DCL_List.cpp" />
+    <ClCompile Include="SL_List.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Utils\StringConvertor.h" />
     <ClInclude Include="mm_backup.h" />
+    <ClInclude Include="DCL_List.h" />
+    <ClInclude Include="SL_List.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
