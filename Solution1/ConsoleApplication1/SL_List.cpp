@@ -76,7 +76,8 @@ void SL_ListReverse(SL_List** list)
     {
         if (!SL_ListEmpty(*list))
         {
-            SL_List* tail = *list;
+            // 方法1 - 头插法
+            /*SL_List* tail = *list;
             SL_List* list_ = *list;
 
             while (list_)
@@ -86,7 +87,21 @@ void SL_ListReverse(SL_List** list)
                 list_ = next;
             }
 
-            tail->next = NULL;
+            tail->next = NULL;*/
+
+            // 方法2 - 迭代法
+            SL_List* list_ = *list;
+            SL_List* node = NULL;
+            SL_List* next = NULL;
+
+            while (list_)
+            {
+                next = list_->next;
+                list_->next = node;
+                node = list_;
+                list_ = next;
+                *list = node;
+            }
         }
     }
 }
