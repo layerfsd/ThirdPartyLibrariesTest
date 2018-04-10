@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 
 #include <cstring>
 #include <cstdio>
 
 
-// Ë«ÏòÑ­»·Á´±í
+// åŒå‘å¾ªç¯é“¾è¡¨
 // Doubly Circular linked list
 struct DCL_List
 {

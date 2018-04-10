@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 #include <cstring>
 #include <cstdio>
 
 
 
-// µ¥ÏòÁ´±í
+// å•å‘é“¾è¡¨
 // Singly linked list
 struct SL_List
 {

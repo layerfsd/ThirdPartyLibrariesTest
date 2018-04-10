@@ -1,4 +1,4 @@
-#include "SL_List.h"
+ï»¿#include "SL_List.h"
 
 
 void SL_ListDestory(SL_List* list)
@@ -76,7 +76,7 @@ void SL_ListReverse(SL_List** list)
     {
         if (!SL_ListEmpty(*list))
         {
-            // ·½·¨1 - Í·²å·¨
+            // æ–¹æ³•1 - å¤´æ’æ³•
             /*SL_List* tail = *list;
             SL_List* list_ = *list;
 
@@ -89,7 +89,7 @@ void SL_ListReverse(SL_List** list)
 
             tail->next = NULL;*/
 
-            // ·½·¨2 - µü´ú·¨
+            // æ–¹æ³•2 - è¿­ä»£æ³•
             SL_List* list_ = *list;
             SL_List* node = NULL;
             SL_List* next = NULL;
