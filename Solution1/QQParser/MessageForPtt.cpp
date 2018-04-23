@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "MessageForPtt.h"
 
 MsgForPtt::MsgForPtt(char* msgData, int iDatalen)
@@ -60,7 +60,7 @@ void MsgForPtt::doParse()
 			  break;
 			}
 
-			//audio·��
+			//audio路径
 			if (10 == it->first)
 			{
 				if (szBuf)

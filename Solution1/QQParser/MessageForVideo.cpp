@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "MessageForVideo.h"
 
 MsgForVideo::MsgForVideo(char* msgData, int iDatalen)
@@ -69,7 +69,7 @@ void MsgForVideo::doParse()
 			  break;
 			}
 
-			//video md5£¨ÊÓÆµÎÄ¼þ£©
+			//video md5ï¼ˆè§†é¢‘æ–‡ä»¶ï¼‰
 			if (18 == it->first)
 			{
 				if (szBuf)
@@ -81,10 +81,10 @@ void MsgForVideo::doParse()
 				
 				//this->strPath.append(szBuf);
 			}
-			//thumb md5(ÊÓÆµ·âÃæ¶ÔÓ¦Í¼Æ¬)
+			//thumb md5(è§†é¢‘å°é¢å¯¹åº”å›¾ç‰‡)
 			if (98 == it->first)
 			{
-				//Í¼Æ¬¶ÔÓ¦MD5
+				//å›¾ç‰‡å¯¹åº”MD5
 				if (szBuf)
 				{
 					splitBytes(szBuf, 16, this->strThumbFile);
@@ -131,12 +131,12 @@ void MsgForVideo::splitBytes(char* in, int insize, std::string& dst)
 			low = in[i] & 0x0f;
 			if (high >= 0x00 && high <= 0x09)
 			{
-				//Êý×Ö
+				//æ•°å­—
 				high += '0';
 			}
 			else
 			{
-				//×ÖÄ¸(×ª»»Îª´óÐ´)
+				//å­—æ¯(è½¬æ¢ä¸ºå¤§å†™)
 				high += 55;
 			}
 

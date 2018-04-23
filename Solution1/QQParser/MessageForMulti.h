@@ -1,6 +1,6 @@
-#pragma once
+ï»¿#pragma once
 /*
- *½âÎöÍ¼Æ¬msgData
+ *è§£æå›¾ç‰‡msgData
 */
 #include "CodeInputStream.h"
 #include "Parser.h"

@@ -1,4 +1,4 @@
-#include <tchar.h>
+ï»¿#include <tchar.h>
 #include <Windows.h>
 #include <strsafe.h>
 #include <stdio.h>
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 
 
 
-    // SQlite·´É¾³ı
+    // SQliteååˆ é™¤
     /*std::wstring dbPath = L"E:\\Project\\test\\ConsoleApplication2\\sms.db";
     std::list<TargetTableInfo> targetTableInfos;
     TargetTableInfo tableInfo;

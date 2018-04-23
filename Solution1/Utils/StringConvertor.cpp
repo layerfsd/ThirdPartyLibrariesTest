@@ -1,4 +1,4 @@
-#include "StringConvertor.h"
+﻿#include "StringConvertor.h"
 #include <Windows.h>
 #include <vector>
 #include <winnls.h>

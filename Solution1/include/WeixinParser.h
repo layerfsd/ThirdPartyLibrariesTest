@@ -1,4 +1,4 @@
-#ifndef _WEIXIN_PARSER_H
+ï»¿#ifndef _WEIXIN_PARSER_H
 #define _WEIXIN_PARSER_H
 
 #ifdef WEIXINPARSER_EXPORTS
@@ -15,13 +15,13 @@
 WEIXIN_API bool WEIXIN_InitEntry(LPCWSTR lpwzCasePath, int iType, char *lpszImei = NULL, bool isDbPath = false);  
 WEIXIN_API void WEIXIN_Free();
 
-//·µ»ØÕËºÅÁĞ±í£¬ÒÔ"|"¸ô¿ª
+//è¿”å›è´¦å·åˆ—è¡¨ï¼Œä»¥"|"éš”å¼€
 //
 WEIXIN_API bool WEIXIN_GetAccountList(char *lpszAccounts, int iSize); 
 WEIXIN_API bool WEIXIN_GetAccoutInfo(const std::string &account);
 WEIXIN_API AccountInfoEx* WEIXIN_GetAccoutInfoEx(const std::string &account);
 
-//»ñÈ¡Ö¸¶¨ÕËºÅµÄºÃÓÑĞÅÏ¢
+//è·å–æŒ‡å®šè´¦å·çš„å¥½å‹ä¿¡æ¯
 //
 WEIXIN_API FriendInfo* WEIXIN_GetFirstFriend(std::string &account);
 WEIXIN_API FriendInfo* WEIXIN_GetNextFriend(std::string &account);
@@ -29,8 +29,8 @@ WEIXIN_API FriendInfo* WEIXIN_GetNextFriend(std::string &account);
 WEIXIN_API FriendInfo* WEIXIN_GetRecoveryFirstFriend(std::string &account);
 WEIXIN_API FriendInfo* WEIXIN_GetRecoveryNextFriend(std::string &account);
 
-//»ñÈ¡Ö¸¶¨Á½ÈË¡¢QQÈº»òÌÖÂÛ×éµÄÁÄÌì¼ÇÂ¼
-//account:Òª»ñÈ¡µÄÕËºÅ chatAccount:Òª»ñÈ¡ÁÄÌì¼ÇÂ¼µÄQQºÅ¡¢ÈººÅ»òÕßÌÖÂÛ×éºÅ iType£ºÒª»ñÈ¡µÄÁÄÌì¼ÇÂ¼µÄÀàĞÍ 0-¸öÈË 1-Èº 2-ÌÖÂÛ×é
+//è·å–æŒ‡å®šä¸¤äººã€QQç¾¤æˆ–è®¨è®ºç»„çš„èŠå¤©è®°å½•
+//account:è¦è·å–çš„è´¦å· chatAccount:è¦è·å–èŠå¤©è®°å½•çš„QQå·ã€ç¾¤å·æˆ–è€…è®¨è®ºç»„å· iTypeï¼šè¦è·å–çš„èŠå¤©è®°å½•çš„ç±»å‹ 0-ä¸ªäºº 1-ç¾¤ 2-è®¨è®ºç»„
 //
 WEIXIN_API ChatHistory* WEIXIN_GetFirstChatHistory(std::string &account, std::string &chatAccount, int iType);
 WEIXIN_API ChatHistory* WEIXIN_GetNextChatHistory(std::string &account, std::string &chatAccount, int iType);

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "MessageForPic.h"
 #include <strsafe.h>
 
@@ -74,10 +74,10 @@ void MsgForPic::doParse()
 					
 				break;
 			}
-			//recv->Crc64(chatimg:´óÐ´md5Öµ)
+			//recv->Crc64(chatimg:å¤§å†™md5å€¼)
 			if (!this->isSend && (50 == it->first))
 			{
-				//Í¼Æ¬¶ÔÓ¦MD5
+				//å›¾ç‰‡å¯¹åº”MD5
 				//splitBytes(szBuf, this->strPath);
 				if (szBuf)
 				{
@@ -92,7 +92,7 @@ void MsgForPic::doParse()
 				char szPath[17 + 6] = {0};
 				this->strPath.clear();
 
-				if (llcrc > 0)//¸ºÖµµÄÇé¿öÏÂÏÈ×ªÕýÊýÔÙ×ª16½øÖÆ
+				if (llcrc > 0)//è´Ÿå€¼çš„æƒ…å†µä¸‹å…ˆè½¬æ­£æ•°å†è½¬16è¿›åˆ¶
 				{
 					this->strPath.append("Tencent\\MobileQQ\\diskcache\\Cache_");
 				}
@@ -176,12 +176,12 @@ void MsgForPic::splitBytes(char* in, std::string& dst)
 			low = in[i] & 0x0f;
 			if (high >= 0x00 && high <= 0x09)
 			{
-				//Êý×Ö
+				//æ•°å­—
 				high += '0';
 			}
 			else
 			{
-				//×ÖÄ¸(×ª»»Îª´óÐ´)
+				//å­—æ¯(è½¬æ¢ä¸ºå¤§å†™)
 				high += 55;
 			}
 

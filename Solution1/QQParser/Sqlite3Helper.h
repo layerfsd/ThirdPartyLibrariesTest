@@ -1,4 +1,4 @@
-#ifndef _SQLITE3_HELP_H
+﻿#ifndef _SQLITE3_HELP_H
 #define _SQLITE3_HELP_H
 
 #include <sqlite3.h>

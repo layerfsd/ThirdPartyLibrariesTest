@@ -1,4 +1,4 @@
-#ifndef QQ_PARSER_INTERNAL_H
+﻿#ifndef QQ_PARSER_INTERNAL_H
 #define QQ_PARSER_INTERNAL_H
 
 #include <QQ&WeixinCommon.h>

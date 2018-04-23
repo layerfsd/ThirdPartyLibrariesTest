@@ -1,4 +1,4 @@
-#ifndef WEIXIN_PARSER_INTERNAL_H
+﻿#ifndef WEIXIN_PARSER_INTERNAL_H
 #define WEIXIN_PARSER_INTERNAL_H
 
 #include <QQ&WeixinCommon.h>

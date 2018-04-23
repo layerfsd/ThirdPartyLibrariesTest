@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "MessageForMulti.h"
 #include "MessageForPic.h"
 #include "MessageForPtt.h"
@@ -34,7 +34,7 @@ bool MsgForMulti::doParse()
     }
 
 	int iTag = codeInput->readTag();
-	//±ê¼Ç0a
+	//æ ‡è®°0a
 	if (iTag != 0xa)
 	{
 		return false;
@@ -55,11 +55,11 @@ bool MsgForMulti::doParse()
 		bool bTail = false;
 		do 
 		{	
-			//±ê¼Ç0a
+			//æ ‡è®°0a
 
 			if (iTag < 0)
 			{
-				//¶ÁÈ¡Òì³£
+				//è¯»å–å¼‚å¸¸
 				MultiMsg msg;
 				msg.msgType = 0;
 				msg.content = (msgBuf + codeInput->bufferPos);
@@ -73,12 +73,12 @@ bool MsgForMulti::doParse()
 			}
 
 
-			//multiMsg ³¤¶È»ñÈ¡
+			//multiMsg é•¿åº¦èŽ·å–
 			int iTmpPos = codeInput->bufferPos;
 			int iLen = codeInput->readRawVarint32(true);
 			if ((iLen < 0) || (iLen >= codeInput->bufferSize))
 			{
-				//¶ÁÈ¡Òì³£
+				//è¯»å–å¼‚å¸¸
 				MultiMsg msg;
 				msg.msgType = 0;
 				msg.content = (msgBuf + iTmpPos);
@@ -102,7 +102,7 @@ bool MsgForMulti::doParse()
 						msg.content = msgPic.strPath;
 						msgLst.push_back(msg);
 
-						//Êý¾ÝÁ÷Æ«ÒÆ
+						//æ•°æ®æµåç§»
 						codeInput->bufferPos += iLen;
 					}
 				}
@@ -147,14 +147,14 @@ bool MsgForMulti::doParse()
 				break;
 			default:
 				{
-					//¿ÉÄÜÊÇptt,videoµ«ÊÇ¾ßÌå±ê¼Ç²»ÏêÕâÀïÔÝÊ±Ìø¹ý
+					//å¯èƒ½æ˜¯ptt,videoä½†æ˜¯å…·ä½“æ ‡è®°ä¸è¯¦è¿™é‡Œæš‚æ—¶è·³è¿‡
 					iLen = codeInput->readRawVarint32(true);
 					MultiMsg msg;
 					msg.msgType = 2;
-					msg.content = "[ÎÄ¼þ]";
+					msg.content = "[æ–‡ä»¶]";
 					msgLst.push_back(msg);
 
-					//Êý¾ÝÁ÷Æ«ÒÆ
+					//æ•°æ®æµåç§»
 					codeInput->bufferPos += iLen;
 				}
 				break;

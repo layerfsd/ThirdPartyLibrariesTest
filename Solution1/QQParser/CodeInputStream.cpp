@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 
 #include <string.h>
 
@@ -42,7 +42,7 @@ int CodedInputStreamMicro::readBytes(char** szBuf, bool bMultiMsg)
 		{
 			break;
 		}
-		//multiMsg¶ÁÈ¡´óÐ¡ÓÐÇø±ð
+		//multiMsgè¯»å–å¤§å°æœ‰åŒºåˆ«
 		int v1 = this->readRawVarint32(bMultiMsg);
 		if((v1 > 0) && (v1 <= this->bufferSize - this->bufferPos)) 
 		{
@@ -91,7 +91,7 @@ long long CodedInputStreamMicro::readRawLittleEndian64()
             long long)this->readRawByte())) & 255) << 48 | ((((long long)this->readRawByte())) & 255) << 56;
 }
 
-//Ôö¼Ó»ìºÏÏûÏ¢³¤¶È¶ÁÈ¡
+//å¢žåŠ æ··åˆæ¶ˆæ¯é•¿åº¦è¯»å–
 int CodedInputStreamMicro::readRawVarint32(bool bMultiMsg)
 {
     int v0 = this->readRawByte();

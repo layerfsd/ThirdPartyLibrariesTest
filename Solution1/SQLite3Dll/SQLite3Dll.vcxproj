@@ -96,7 +96,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="sqlite3.c" />
+    <ClCompile Include="..\Utils\sqlite3.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\sqlite3.h" />
