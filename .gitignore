@@ -15,6 +15,7 @@
 #过滤文件
 Debug
 Release
+GeneratedFiles
 .vs
 *.ncb
 *.suo
