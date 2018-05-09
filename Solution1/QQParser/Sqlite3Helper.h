@@ -1,7 +1,7 @@
 ﻿#ifndef _SQLITE3_HELP_H
 #define _SQLITE3_HELP_H
 
-#include <sqlite3.h>
+#include "..\Utils\sqlite3.h"
 //#include <processthread.h>
 
 typedef int (*fnsqlite3_prepare)(

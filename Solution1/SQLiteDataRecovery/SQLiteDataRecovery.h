@@ -2,7 +2,7 @@
 #define SQLITEDATARECOVERY_H
 
 #include "SQLiteDataRecoveryHeader.h"
-#include <sqlite3.h>
+#include "..\Utils\sqlite3.h"
 #include <strsafe.h>
 #include <list>
 #include <set>

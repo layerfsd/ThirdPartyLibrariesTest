@@ -14,8 +14,8 @@
 #include <zutil.h>
 #pragma comment(lib, "zdll")
 
-#include <sqlite3.h>
-#pragma comment(lib, "SQLite3Lib")
+#include "..\Utils\sqlite3.h"
+#pragma comment(lib, "sqlite3")
 
 
 #include "mm_backup.h"

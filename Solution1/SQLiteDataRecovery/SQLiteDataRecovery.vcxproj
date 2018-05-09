@@ -98,16 +98,6 @@
     <ClInclude Include="..\Utils\StringConvertor.h" />
     <ClInclude Include="SQLiteDataRecovery.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SQLite3Dll\SQLite3Dll.vcxproj">
-      <Project>{3d4eff44-692d-4ddc-b587-7dd510fa846b}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\SQLite3Lib\SQLite3Lib.vcxproj">
-      <Project>{a2447db0-9c8d-4d2a-a6d9-9d95c9bb8e39}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
