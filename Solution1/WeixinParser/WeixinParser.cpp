@@ -27,14 +27,7 @@ using std::stringstream;
 #pragma comment(lib, "ShlWapi.lib")
 
 // openssl
-#ifdef _DEBUG
-#pragma comment(lib, "libcryptoMTd")
-#else
-#pragma comment(lib, "libcryptoMT")
-#endif
-
-#pragma comment(lib, "crypt32")
-#pragma comment(lib, "ws2_32")
+#pragma comment(lib, "libcrypto")
 
 
 std::wstring	g_wsDirPath;

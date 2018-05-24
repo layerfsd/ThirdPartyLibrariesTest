@@ -26,7 +26,7 @@
 #include <string.h>
 
 #include <openssl/rc4.h>
-#include <zlib.h>
+#include <zlib/zlib.h>
 
 struct mm_recover_ctx {
     sqlite3 *db; // database connection, not initialized until actual running.

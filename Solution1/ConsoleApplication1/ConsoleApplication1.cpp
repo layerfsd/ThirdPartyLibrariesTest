@@ -12,7 +12,7 @@
 #pragma comment(lib, "WeixinParser")
 
 #include <zutil.h>
-#pragma comment(lib, "zdll")
+#pragma comment(lib, "zlib")
 
 #include "..\Utils\sqlite3.h"
 #pragma comment(lib, "sqlite3")

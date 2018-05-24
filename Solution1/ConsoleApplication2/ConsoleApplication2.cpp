@@ -28,13 +28,9 @@ void cb_ObjectInfo(const ObjectInfo *objectInfo)
 #include <openssl/pem.h>
 #include <openssl/bio.h>
 #include <openssl/evp.h>
-#ifdef _DEBUG
-    #pragma comment(lib, "libcryptoMTd")
-#else
-    #pragma comment(lib, "libcryptoMT")
-#endif
+    
+#pragma comment(lib, "libcrypto")
 
-#pragma comment(lib, "crypt32")
 
 std::wstring GetMD5(const std::string &src)
 {

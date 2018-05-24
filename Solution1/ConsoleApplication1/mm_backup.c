@@ -33,20 +33,13 @@
 
 
 // openssl
-#ifdef _DEBUG
-#pragma comment(lib, "libcryptoMTd")
-#else
-#pragma comment(lib, "libcryptoMT")
-#endif
-
-#pragma comment(lib, "crypt32")
-#pragma comment(lib, "ws2_32")
+#pragma comment(lib, "libcrypto")
 
 // pthread
 #pragma comment(lib, "pthreadVC2")
 
 // zlib
-#pragma comment(lib, "zdll")
+#pragma comment(lib, "zlib")
 
 
 

@@ -24,7 +24,10 @@ UpgradeLog.htm
 !/Solution1/Debug/7z.dll
 !/Solution1/Debug/7z.exe
 !/Solution1/Debug/pthreadVC2.dll
-!/Solution1/Debug/zlib1.dll
+!/Solution1/Debug/pthreadVC2.lib
+!/Solution1/Debug/zlib.dll
+!/Solution1/Debug/zlib.lib
+!/Solution1/Debug/zlib.pdb
 !/Solution1/Debug/libcrypto.dll
 !/Solution1/Debug/libcrypto.pdb
 !/Solution1/Debug/libssl.dll
@@ -39,7 +42,10 @@ UpgradeLog.htm
 !/Solution1/Release/7z.dll
 !/Solution1/Release/7z.exe
 !/Solution1/Release/pthreadVC2.dll
-!/Solution1/Release/zlib1.dll
+!/Solution1/Release/pthreadVC2.lib
+!/Solution1/Release/zlib.dll
+!/Solution1/Release/zlib.lib
+!/Solution1/Release/zlib.pdb
 !/Solution1/Release/libcrypto.dll
 !/Solution1/Release/libcrypto.pdb
 !/Solution1/Release/libssl.dll
