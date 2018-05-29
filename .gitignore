@@ -36,6 +36,15 @@ UpgradeLog.htm
 !/Solution1/Debug/libssl.lib
 !/Solution1/Debug/openssl.exe
 !/Solution1/Debug/openssl.pdb
+!/Solution1/Win32/Debug
+/Solution1/Win32/Debug/*
+!/Solution1/Win32/Debug/common_style.qss
+!/Solution1/Win32/Debug/FileType.xml
+!/Solution1/Win32/Debug/Qt5Cored.dll
+!/Solution1/Win32/Debug/Qt5Guid.dll
+!/Solution1/Win32/Debug/Qt5Widgetsd.dll
+!/Solution1/Win32/Debug/Qt5WinExtrasd.dll
+!/Solution1/Win32/Debug/Qt5Xmld.dll
 !/Solution1/Release
 /Solution1/Release/*
 !/Solution1/Release/jre
@@ -54,5 +63,14 @@ UpgradeLog.htm
 !/Solution1/Release/libssl.lib
 !/Solution1/Release/openssl.exe
 !/Solution1/Release/openssl.pdb
+!/Solution1/Win32/Release
+/Solution1/Win32/Release/*
+!/Solution1/Win32/Release/common_style.qss
+!/Solution1/Win32/Release/FileType.xml
+!/Solution1/Win32/Release/Qt5Core.dll
+!/Solution1/Win32/Release/Qt5Gui.dll
+!/Solution1/Win32/Release/Qt5Widgets.dll
+!/Solution1/Win32/Release/Qt5WinExtras.dll
+!/Solution1/Win32/Release/Qt5Xml.dll
 
 

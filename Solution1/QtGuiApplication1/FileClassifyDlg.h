@@ -1,4 +1,4 @@
-Ôªø#ifndef FILECLASSIFYFLG_H
+#ifndef FILECLASSIFYFLG_H
 #define FILECLASSIFYFLG_H
 
 
@@ -7,12 +7,13 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDateTime>
+#include <QMap>
 #include <Windows.h>
 #include <strsafe.h>
 #include "ui_FileClassifyDlg.h"
 
 
-//Á∫øÁ®ã
+//œﬂ≥Ã
 class WorkThread : public QThread
 {
 	Q_OBJECT
@@ -27,15 +28,15 @@ protected:
 	void run();
 
 private:
-	bool m_stop;
-	QString m_dataPath;
+	bool _stop;
+	QString _dataPath;
 	void travelFile();
 
 signals:
 	void signal_addFile(const QString &file);
 };
 
-/*Êñá‰ª∂‰ø°ÊÅØÁªìÊûÑ*/
+/*Œƒº˛–≈œ¢Ω·ππ*/
 struct FileInfoStruct 
 {
     QString	strFileNameNoPath;
@@ -45,8 +46,9 @@ struct FileInfoStruct
     QString	strFileNameWithPath;
 };
 
-//Á™ó‰Ωì
-class FileClassifyModel;
+//¥∞ÃÂ
+class FileInfoModel;
+class FileTypeModel;
 class FileClassifyDlg : public QFrame
 {
 	Q_OBJECT
@@ -58,19 +60,30 @@ public:
 
 private:
 	Ui::FileClassifyDlg ui;
-	WorkThread m_thread;
-	int m_currentRowCount;
-	QTableWidgetItem *m_currentItem;
+	WorkThread _thread;
+	int _currentRowCount;
+    QModelIndex _currentIndex;
 
-	//<key=file suffix, value=file info model>
-    QMap<QString, FileClassifyModel*>	m_modelMap;
+	// <key, value> = <file suffix, file info model>
+    QMap<QString, FileInfoModel*> _fileInfoModelMap;
+    FileTypeModel *_fileTypeModel;
+
+    // <key, value> = <file suffix, file type>
+    // eg. <.txt, Œƒ±æŒƒº˛>
+    QMap<QString, QString> _fileTypeMap;
+
+    // <key, value> = <file type, row>
+    // eg.<Œƒ±æŒƒº˛, 0>
+    QMap<QString, int> _fileTypeRowMap;
 
 private:
 	QString formatFileSize(__int64 size);
+    void initFileTypeMap();
 
 public slots:
 	void slot_addFile(const QString &file);
-	void on_tableWidget_itemClicked(QTableWidgetItem *item);
+	void slot_pushButton_clicked();
+	void on_treeView_clicked(const QModelIndex &index);
 	void on_tableView_doubleClicked(const QModelIndex &index);
 	void slot_sliderValueChanged(int value);
 };

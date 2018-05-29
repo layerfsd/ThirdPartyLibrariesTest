@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FileType>
+	<Type name="文本文件" value="chm;txt;pdf;html;xml"></Type>
+	<Type name="Office文档" value="docx;doc;xls;xlsx;pptx;ppt"></Type>
+	<Type name="WPS文档" value="wps;rtf;et;ett;dps;dpt"></Type>
+	<Type name="图片文件" value="bmp;gif;jpeg;png;tif;jpg"></Type>
+	<Type name="压缩文件" value="rar;zip;7z;jar;iso;cab;tar;img"></Type>
+	<Type name="视频文件" value="avi;rmvb;avd;mpeg;mp4;3gp;wmv;mkv;mov;vob;flv;swf"></Type>
+	<Type name="音频文件" value="mp3;aac;m4a;amr;ogg;wav"></Type>
+</FileType>

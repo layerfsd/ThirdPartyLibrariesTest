@@ -3,8 +3,11 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QScrollBar>
+#include <QtXml/QDomDocument>
 #include "FileClassifyDlg.h"
-#include "FileClassifyModel.h"
+#include "FileInfoModel.h"
+#include "FileTypeModel.h"
+#include "ObjectItem.h"
 #include "GetFileDetail.h"
 
 //**********************************************************
@@ -30,8 +33,8 @@ protected:
 WorkThread::WorkThread(QObject *parent /* = 0 */)
 :QThread(parent)
 {
-	m_dataPath.clear();
-	m_stop = false;
+	_dataPath.clear();
+	_stop = false;
 }
 
 WorkThread::~WorkThread()
@@ -46,7 +49,7 @@ void WorkThread::run()
 
 void WorkThread::travelFile()
 {
-	QDir dir(m_dataPath);
+	QDir dir(_dataPath);
 	QFileInfoList fileList;
 	QFileInfo curFile;
 	if(!dir.exists())
@@ -60,7 +63,7 @@ void WorkThread::travelFile()
 		int infoNum = fileList.size();
 		for(int i = infoNum-1; i >= 0; --i)
 		{
-			if (m_stop)
+			if (_stop)
 			{
 				return;
 			}
@@ -68,7 +71,7 @@ void WorkThread::travelFile()
 			curFile=fileList[i];
 			if(curFile.isFile())//file
 			{
-				if (!m_stop)
+				if (!_stop)
 				{
 					emit signal_addFile(curFile.absoluteFilePath());
 					msleep(100);
@@ -95,12 +98,12 @@ void WorkThread::travelFile()
 
 void WorkThread::setDataPath(const QString &dataPath)
 {
-	m_dataPath = dataPath;
+	_dataPath = dataPath;
 }
 
 void WorkThread::setStop(bool stop)
 {
-	m_stop = stop;
+	_stop = stop;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -111,18 +114,30 @@ FileClassifyDlg::FileClassifyDlg(QWidget *parent /* = 0 */)
 {
 	ui.setupUi(this);
 
-	m_currentItem = NULL;
-	m_currentRowCount = 0;
+	_currentIndex = QModelIndex();
+	_currentRowCount = 0;
+
+    initFileTypeMap();
 
 	QStringList header;
-	header << QString::fromUtf16(L"文件名") << QString::fromUtf16(L"修改时间") << QString::fromUtf16(L"大小") << QString::fromUtf16(L"路径");
+	header << QString::fromLocal8Bit("文件名") << QString::fromLocal8Bit("修改时间") << QString::fromLocal8Bit("大小") << QString::fromLocal8Bit("路径");
 
-    FileClassifyModel *model = new FileClassifyModel;
+    FileInfoModel *model = new FileInfoModel;
     if (model)
     {
         model->setHorizontalHeaderLabels(header);
-        m_modelMap.insert("*.*", model);
+        _fileInfoModelMap.insert("*.*", model);
         ui.tableView->setModel(model);
+    }
+
+    header.clear();
+    header << QString::fromLocal8Bit("类型");
+
+    _fileTypeModel = new FileTypeModel();
+    if (_fileTypeModel)
+    {
+        _fileTypeModel->setHorizontalHeaderLabels(header);
+        ui.treeView->setModel(_fileTypeModel);
     }
 
 	ui.tableView->setColumnWidth(0, 220);
@@ -130,21 +145,18 @@ FileClassifyDlg::FileClassifyDlg(QWidget *parent /* = 0 */)
 	ui.tableView->setColumnWidth(2, 80);
 	ui.tableView->setItemDelegate(new NoFocusDelegate);
 	ui.tableView->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-	ui.tableWidget->setItemDelegate(new NoFocusDelegate);
-	ui.tableWidget->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+	ui.treeView->setItemDelegate(new NoFocusDelegate);
+	ui.treeView->header()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
-	/*connect(ui.tableView->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_sliderValueChanged(int)));
-	connect(&m_thread, SIGNAL(signal_addFile(const QString &)), this, SLOT(slot_addFile(const QString &)));*/
-
-    connect(ui.tableView->verticalScrollBar(), &QScrollBar::valueChanged, this, &FileClassifyDlg::slot_sliderValueChanged);
-    connect(&m_thread, &WorkThread::signal_addFile, this, &FileClassifyDlg::slot_addFile);
+	connect(ui.tableView->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_sliderValueChanged(int)));
+	connect(&_thread, SIGNAL(signal_addFile(const QString &)), this, SLOT(slot_addFile(const QString &)));
 }
 
 FileClassifyDlg::~FileClassifyDlg()
 {
-	m_thread.setStop(true);
-	m_thread.exit();
-	m_thread.wait();
+	_thread.setStop(true);
+	_thread.exit();
+	_thread.wait();
 }
 
 QString FileClassifyDlg::formatFileSize(__int64 size)
@@ -175,6 +187,41 @@ QString FileClassifyDlg::formatFileSize(__int64 size)
 	return QString::fromUtf16(wzFileSize);
 }
 
+void FileClassifyDlg::initFileTypeMap()
+{
+    _fileTypeMap.clear();
+
+    QString xmlPath = QString("%1/FileType.xml").arg(QApplication::applicationDirPath());
+    QFile xml(xmlPath);
+    if ( !xml.open(QIODevice::ReadOnly | QIODevice::Text) )
+        return;
+
+    QDomDocument doc;
+    if (!doc.setContent(&xml, false))
+    {
+        xml.close();
+        return;
+    }
+
+    xml.close();
+
+    QDomNodeList fileTypes = doc.documentElement().childNodes();
+    for (int i = 0; i != fileTypes.count(); ++i)
+    {
+        QDomElement type = fileTypes.at(i).toElement();
+        QList<QString> types = type.attribute("value").split(";");
+
+        for (int index = 0; index < types.size(); ++index)
+        {
+            _fileTypeMap.insert(types.at(index), type.attribute("name"));
+        }
+
+        _fileTypeRowMap.insert(type.attribute("name"), i);
+    }
+
+    _fileTypeRowMap.insert(QString::fromLocal8Bit("其它文件"), _fileTypeRowMap.size());
+}
+
 void FileClassifyDlg::slot_addFile(const QString &file)
 {
 	if (!QFile::exists(file))
@@ -182,13 +229,21 @@ void FileClassifyDlg::slot_addFile(const QString &file)
 		return;
 	}
 
+    QString type, compareType, text;
+    ObjectItem *item = NULL;
+    ObjectItem *childItem = NULL;
+    FileInfoModel *fileInfoModel = NULL;
+    int rowCount = -1;
+    quint32 num = 0;
+    QRegExp rx("\\((\\d+)\\)");
+
 	QFileInfo fileInfo(file);
 	quint64 fileSize = fileInfo.size();
 
 	//get file suffix
 	FileInfoStruct fileInfoStruct;
 	fileInfoStruct.strFileNameNoPath = fileInfo.fileName();
-	fileInfoStruct.strFileNameWithPath = fileInfo.absoluteFilePath().replace('/', '\\');
+	fileInfoStruct.strFileNameWithPath = fileInfo.absoluteFilePath().replace(QChar('/'), QChar('\\'));
 	if (fileInfoStruct.strFileNameWithPath.endsWith("tar.gz"))
 	{
 		fileInfoStruct.strFileSuffix = fileInfo.completeSuffix();
@@ -200,143 +255,201 @@ void FileClassifyDlg::slot_addFile(const QString &file)
 
     if (fileInfoStruct.strFileSuffix.isEmpty())
     {
-        fileInfoStruct.strFileSuffix = QString::fromUtf16(L"无后缀名");
+        fileInfoStruct.strFileSuffix = QString::fromLocal8Bit("无后缀名");
     }
 
 	fileInfoStruct.strFileSize = formatFileSize(fileSize);
 	fileInfoStruct.strFileLastModifiedTime = fileInfo.lastModified().toString("yyyy/MM/dd hh:mm:ss");
 
     //model of total files
-    FileClassifyModel *model = NULL;
-    int rowCount = -1;
-    if (m_modelMap.end() != m_modelMap.find("*.*"))
+    if (_fileInfoModelMap.end() != _fileInfoModelMap.find("*.*"))
     {
-        model = m_modelMap["*.*"];
-        if (model)
+        fileInfoModel = _fileInfoModelMap["*.*"];
+        if (fileInfoModel)
         {
-            rowCount = model->rowCount();
-            model->setItem(rowCount, 0, fileInfoStruct.strFileNameNoPath, GetFileDetail::GetFileIconFromFileName(fileInfoStruct.strFileNameWithPath));
-            model->setItem(rowCount, 1, fileInfoStruct.strFileLastModifiedTime);
-            model->setItem(rowCount, 2, fileInfoStruct.strFileSize);
-            model->setItem(rowCount, 3, fileInfoStruct.strFileNameWithPath);
+            rowCount = fileInfoModel->rowCount();
+            fileInfoModel->setItem(rowCount, 0, fileInfoStruct.strFileNameNoPath, GetFileDetail::GetFileIconFromFileName(fileInfoStruct.strFileNameWithPath));
+            fileInfoModel->setItem(rowCount, 1, fileInfoStruct.strFileLastModifiedTime);
+            fileInfoModel->setItem(rowCount, 2, fileInfoStruct.strFileSize);
+            fileInfoModel->setItem(rowCount, 3, fileInfoStruct.strFileNameWithPath);
         }
     }
 
-    //model of one type files
-    model = NULL;
+    //fileInfoModel of one type files
+    fileInfoModel = NULL;
     rowCount = -1;
-    if (m_modelMap.end() != m_modelMap.find(fileInfoStruct.strFileSuffix))
+    if (_fileInfoModelMap.end() != _fileInfoModelMap.find(fileInfoStruct.strFileSuffix))
     {
-        model = m_modelMap[fileInfoStruct.strFileSuffix];
+        fileInfoModel = _fileInfoModelMap[fileInfoStruct.strFileSuffix];
     }
     else
     {
-        QTableWidgetItem *item = new QTableWidgetItem(fileInfoStruct.strFileSuffix);
-        item->setData(Qt::UserRole + 1, fileInfoStruct.strFileSuffix);
-        item->setIcon(GetFileDetail::GetFileIconFromFileName(fileInfoStruct.strFileNameWithPath));
-        rowCount = ui.tableWidget->rowCount();
-        ui.tableWidget->insertRow(rowCount);
-        ui.tableWidget->setItem(rowCount, 0, item);
-
-        QStringList header;
-        header << QString::fromUtf16(L"文件名") << QString::fromUtf16(L"修改时间") << QString::fromUtf16(L"大小") << QString::fromUtf16(L"路径");
-        model = new FileClassifyModel;
-        if (model)
+        if (_fileTypeModel)
         {
-            model->setHorizontalHeaderLabels(header);
-            m_modelMap.insert(fileInfoStruct.strFileSuffix, model);
+            type = _fileTypeMap.value(fileInfoStruct.strFileSuffix, QString::fromLocal8Bit("其它文件"));
+            item = _fileTypeModel->findItem(type);
+            if (!item)
+            {
+                item = new ObjectItem(_fileTypeModel);
+                if (item)
+                {
+                    _fileTypeModel->addItem(item);
+                    item->setText(type);
+                    item->setData(type, Qt::UserRole + 1);
+                    item->setIcon(GetFileDetail::GetFileIconFromFileName(fileInfoStruct.strFileNameWithPath));
+                }
+            }
+
+            if (item)
+            {
+                childItem = new ObjectItem(_fileTypeModel);
+                if (childItem)
+                {
+                    childItem->setText(fileInfoStruct.strFileSuffix);
+                    childItem->setData(fileInfoStruct.strFileSuffix, Qt::UserRole + 1);
+                    childItem->setIcon(GetFileDetail::GetFileIconFromFileName(fileInfoStruct.strFileNameWithPath));
+                    item->addChild(childItem);
+                }
+            }
+
+            QStringList header;
+            header << QString::fromLocal8Bit("文件名") << QString::fromLocal8Bit("修改时间") << QString::fromLocal8Bit("大小") << QString::fromLocal8Bit("路径");
+            fileInfoModel = new FileInfoModel;
+            if (fileInfoModel)
+            {
+                fileInfoModel->setHorizontalHeaderLabels(header);
+                _fileInfoModelMap.insert(fileInfoStruct.strFileSuffix, fileInfoModel);
+            }
         }
     }
 
-    if (model)
+    if (fileInfoModel)
     {
-        rowCount = model->rowCount();
-        model->setItem(rowCount, 0, fileInfoStruct.strFileNameNoPath, GetFileDetail::GetFileIconFromFileName(fileInfoStruct.strFileNameWithPath));
-        model->setItem(rowCount, 1, fileInfoStruct.strFileLastModifiedTime);
-        model->setItem(rowCount, 2, fileInfoStruct.strFileSize);
-        model->setItem(rowCount, 3, fileInfoStruct.strFileNameWithPath);
+        rowCount = fileInfoModel->rowCount();
+        fileInfoModel->setItem(rowCount, 0, fileInfoStruct.strFileNameNoPath, GetFileDetail::GetFileIconFromFileName(fileInfoStruct.strFileNameWithPath));
+        fileInfoModel->setItem(rowCount, 1, fileInfoStruct.strFileLastModifiedTime);
+        fileInfoModel->setItem(rowCount, 2, fileInfoStruct.strFileSize);
+        fileInfoModel->setItem(rowCount, 3, fileInfoStruct.strFileNameWithPath);
     }
 
 
-	//update total files num
-	QTableWidgetItem *item_type = ui.tableWidget->horizontalHeaderItem(0);
-	QString text;
-	quint32 num = 0;
-	if (item_type)
-	{
-		text = item_type->text();
-	}
+    if (_fileTypeModel)
+    {
+        //update total files num
+        text = _fileTypeModel->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString();
 
-	QRegExp rx("\\((\\d+)\\)");
-	if(-1 != rx.indexIn(text))
-	{
-		num = rx.cap(1).toUInt();
-		++num;
-		text.replace(rx, "(" + QString::number(num) + ")");
-	}
-	else
-	{
-		num = 1;
-		text += QString("(%1)").arg(num);
-	}
+        if(-1 != rx.indexIn(text))
+        {
+            num = rx.cap(1).toUInt();
+            ++num;
+            text.replace(rx, "(" + QString::number(num) + ")");
+        }
+        else
+        {
+            num = 1;
+            text += QString("(%1)").arg(num);
+        }
 
-	item_type->setText(text);
-	ui.tableWidget->setHorizontalHeaderItem(0, item_type);
+        _fileTypeModel->setHeaderData(0, Qt::Horizontal, text, Qt::DisplayRole);
 
-	//update one type files num
-	for (int index = 0; index < ui.tableWidget->rowCount(); ++index)
-	{
-		item_type = ui.tableWidget->item(index, 0);
-		if (0 == QString::compare(item_type->data(Qt::UserRole + 1).toString(), fileInfoStruct.strFileSuffix))
-		{
-			num = 0;
-			text.clear();
-			if (item_type)
-			{
-				text = item_type->text();
-			}
+        //update one type files num
+        for (int i = 0; i < _fileTypeModel->rowCount(); ++i)
+        {
+            item = _fileTypeModel->item(i);
+            if (item)
+            {
+                text = item->text();
+                type = item->data(Qt::UserRole + 1).toString();
+                compareType = _fileTypeMap.value(fileInfoStruct.strFileSuffix, QString::fromLocal8Bit("其它文件"));
 
-			if(-1 != rx.indexIn(text))
-			{
-				num = rx.cap(1).toUInt();
-				++num;
-				text.replace(rx, "(" + QString::number(num) + ")");
-			}
-			else
-			{
-				num = 1;
-				text += QString("(%1)").arg(num);
-			}
+                if (0 == type.compare(compareType, Qt::CaseSensitive))
+                {
+                    num = 0;
 
-			item_type->setText(text);
-		}
-	}
-    
+                    if(-1 != rx.indexIn(text))
+                    {
+                        num = rx.cap(1).toUInt();
+                        ++num;
+                        text.replace(rx, "(" + QString::number(num) + ")");
+                    }
+                    else
+                    {
+                        num = 1;
+                        text += QString("(%1)").arg(num);
+                    }
+
+                    item->setText(text);
+
+                    //update one suffix files num
+                    for (int j = 0; j < item->childCount(); ++j)
+                    {
+                        childItem = item->child(j);
+                        if (childItem)
+                        {
+                            text = childItem->text();
+                            type = childItem->data(Qt::UserRole + 1).toString();
+                            compareType = fileInfoStruct.strFileSuffix;
+
+                            if (0 == type.compare(compareType, Qt::CaseSensitive))
+                            {
+                                num = 0;
+
+                                if(-1 != rx.indexIn(text))
+                                {
+                                    num = rx.cap(1).toUInt();
+                                    ++num;
+                                    text.replace(rx, "(" + QString::number(num) + ")");
+                                }
+                                else
+                                {
+                                    num = 1;
+                                    text += QString("(%1)").arg(num);
+                                }
+
+                                childItem->setText(text);
+                                break;
+                            }
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
+    }
 }
 
-void FileClassifyDlg::on_tableWidget_itemClicked(QTableWidgetItem *item)
+void FileClassifyDlg::on_treeView_clicked(const QModelIndex &index)
 {
-	if (item == m_currentItem || !item)
-	{
-		return;
-	}
+    if (index == _currentIndex)
+    {
+        return;
+    }
 
-	m_currentRowCount = 0;
-	m_currentItem = item;
-    FileClassifyModel *model = NULL;
-	QString fileType = item->data(Qt::UserRole + 1).toString();
-	if (m_modelMap.end() != m_modelMap.find(fileType))
-	{
-		model = m_modelMap[fileType];
-	}
+    _currentRowCount = 0;
+    _currentIndex = index;
 
-	if (model)
-	{
-		ui.tableView->setModel(model);
-	}
+    if (!_fileTypeModel)
+        return;
 
-	ui.tableView->verticalScrollBar()->setValue(0);
-	slot_sliderValueChanged(0);
+    ObjectItem *item = _fileTypeModel->item(index);
+    if (item)
+    {
+        FileInfoModel *model = NULL;
+        QString fileType = item->data(Qt::UserRole + 1).toString();
+        if (_fileInfoModelMap.end() != _fileInfoModelMap.find(fileType))
+        {
+            model = _fileInfoModelMap[fileType];
+        }
+
+        if (model)
+        {
+            ui.tableView->setModel(model);
+        }
+    }
+
+    ui.tableView->verticalScrollBar()->setValue(0);
+    slot_sliderValueChanged(0);
 }
 
 void FileClassifyDlg::on_tableView_doubleClicked(const QModelIndex &index)
@@ -346,13 +459,13 @@ void FileClassifyDlg::on_tableView_doubleClicked(const QModelIndex &index)
 		return;
 	}
 	
-    FileClassifyModel *current_model = (FileClassifyModel*)(ui.tableView->model());
+    FileInfoModel *current_model = (FileInfoModel*)(ui.tableView->model());
 	if (!current_model)
 	{
 		return;
 	}
 
-    FileItem *item = current_model->item(index.row(), 3);
+    FileInfoItem *item = current_model->item(index.row(), 3);
 	if (!item)
 	{
 		return;
@@ -366,21 +479,21 @@ void FileClassifyDlg::on_tableView_doubleClicked(const QModelIndex &index)
 	}
 	else
 	{
-		QMessageBox::information(0, QString::fromUtf16(L"提示"), QString::fromUtf16(L"文件不存在！"));
+		QMessageBox::information(0, QString::fromLocal8Bit("提示"), QString::fromLocal8Bit("文件不存在！"));
 	}
 }
 
 void FileClassifyDlg::Update()
 {
-	m_thread.setStop(true);
-	m_thread.exit();
-	m_thread.wait();
+	_thread.setStop(true);
+	_thread.exit();
+	_thread.wait();
 
-    for(QMap<QString, FileClassifyModel*>::iterator iter = m_modelMap.begin();
-        iter != m_modelMap.end();
+    for(QMap<QString, FileInfoModel*>::iterator iter = _fileInfoModelMap.begin();
+        iter != _fileInfoModelMap.end();
         ++iter)
     {
-        FileClassifyModel *model = iter.value();
+        FileInfoModel *model = iter.value();
         if (model)
         {
             model->clear();
@@ -392,37 +505,77 @@ void FileClassifyDlg::Update()
         }
     }
 
-	ui.tableView->setFont(QString::fromUtf16(L"微软雅黑"));
-	QString dataPath = QString::fromUtf16(L"D:\\software");
-	m_thread.setStop(false);
-	m_thread.setDataPath(dataPath);
-	m_thread.start();
+	ui.tableView->setFont(QString::fromLocal8Bit("微软雅黑"));
+	QString dataPath = "D:\\software";
+	_thread.setStop(false);
+	_thread.setDataPath(dataPath);
+	_thread.start();
 }
 
-void FileClassifyDlg::slot_sliderValueChanged(int value)
+void FileClassifyDlg::slot_pushButton_clicked()
 {
-    FileClassifyModel *current_model = static_cast<FileClassifyModel*>(ui.tableView->model());
+    FileInfoModel *current_model = static_cast<FileInfoModel*>(ui.tableView->model());
 	if (!current_model)
 	{
 		return;
 	}
 
-	if (current_model == m_modelMap["*.*"])
+	QPushButton *button = qobject_cast<QPushButton*>(sender());
+	if (!button)
+	{
+		return;
+	}
+
+	int currentRow = ui.tableView->rowAt(button->y());
+	if (-1 == currentRow)
+	{
+		return;
+	}
+
+	QModelIndex index = current_model->index(currentRow, 0, QModelIndex());
+	ui.tableView->setCurrentIndex(index);
+
+	if (!current_model->item(currentRow, 3))
+	{
+		return;
+	}
+
+	QString filePath = current_model->data(index).toString();
+	if (QFile::exists(filePath))
+	{
+		QString cmd = "/select,\"" + filePath + "\"";
+		ShellExecuteW(NULL, L"open", L"explorer.exe", cmd.utf16(), NULL, SW_SHOWNORMAL);
+	}
+	else
+	{
+		QMessageBox::information(0, QString::fromLocal8Bit("提示"), QString::fromLocal8Bit("文件不存在！"));
+	}
+}
+
+void FileClassifyDlg::slot_sliderValueChanged(int value)
+{
+    FileInfoModel *current_model = static_cast<FileInfoModel*>(ui.tableView->model());
+	if (!current_model)
+	{
+		return;
+	}
+
+	if (current_model == _fileInfoModelMap["*.*"])
 	{
 		return;
 	}
 
 	//滚动至每页倒数50行时加载下一页
-	if (m_currentRowCount > 50)
+	if (_currentRowCount > 50)
 	{
-		if (value <= m_currentRowCount - 50)
+		if (value <= _currentRowCount - 50)
 		{
 			return;
 		}
 	}
 
 	int totalRowCount = current_model->rowCount();	
-	if (totalRowCount == m_currentRowCount)
+	if (totalRowCount == _currentRowCount)
 	{
 		return;
 	}
@@ -430,14 +583,14 @@ void FileClassifyDlg::slot_sliderValueChanged(int value)
 	qDebug() << QString("total row : %1	current row : %2").arg(totalRowCount).arg(value);
 
 	int count = 0;
-	if (totalRowCount - m_currentRowCount > 100)
+	if (totalRowCount - _currentRowCount > 100)
 	{
-		count = m_currentRowCount + 100; 
+		count = _currentRowCount + 100; 
 	}
 	else
 	{
 		count = totalRowCount;
 	}
 
-	m_currentRowCount = count;
+	_currentRowCount = count;
 }
