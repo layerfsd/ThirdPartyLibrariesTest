@@ -16,15 +16,15 @@
 class NoFocusDelegate : public QStyledItemDelegate
 {
 protected:
-	void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index)const
-	{
-		QStyleOptionViewItem itemOption(option);
-		if (itemOption.state & QStyle::State_HasFocus)
-		{
-			itemOption.state = itemOption.state ^ QStyle::State_HasFocus;
-		}
-		QStyledItemDelegate::paint(painter, itemOption, index);
-	}
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index)const
+    {
+        QStyleOptionViewItem itemOption(option);
+        if (itemOption.state & QStyle::State_HasFocus)
+        {
+            itemOption.state = itemOption.state ^ QStyle::State_HasFocus;
+        }
+        QStyledItemDelegate::paint(painter, itemOption, index);
+    }
 };
 
 /////////////////////////////////////////////////////////////////
@@ -33,8 +33,8 @@ protected:
 WorkThread::WorkThread(QObject *parent /* = 0 */)
 :QThread(parent)
 {
-	_dataPath.clear();
-	_stop = false;
+    _dataPath.clear();
+    _stop = false;
 }
 
 WorkThread::~WorkThread()
@@ -43,67 +43,67 @@ WorkThread::~WorkThread()
 }
 
 void WorkThread::run()
-{	
-	travelFile();
+{    
+    travelFile();
 }
 
 void WorkThread::travelFile()
 {
-	QDir dir(_dataPath);
-	QFileInfoList fileList;
-	QFileInfo curFile;
-	if(!dir.exists())
-	{
-		return;
-	}
+    QDir dir(_dataPath);
+    QFileInfoList fileList;
+    QFileInfo curFile;
+    if(!dir.exists())
+    {
+        return;
+    }
 
-	fileList = dir.entryInfoList(QDir::Dirs | QDir::Files | QDir::Readable | QDir::Hidden | QDir::NoDotAndDotDot);
-	while(fileList.size() > 0)
-	{
-		int infoNum = fileList.size();
-		for(int i = infoNum-1; i >= 0; --i)
-		{
-			if (_stop)
-			{
-				return;
-			}
+    fileList = dir.entryInfoList(QDir::Dirs | QDir::Files | QDir::Readable | QDir::Hidden | QDir::NoDotAndDotDot);
+    while(fileList.size() > 0)
+    {
+        int infoNum = fileList.size();
+        for(int i = infoNum-1; i >= 0; --i)
+        {
+            if (_stop)
+            {
+                return;
+            }
 
-			curFile=fileList[i];
-			if(curFile.isFile())//file
-			{
-				if (!_stop)
-				{
-					emit signal_addFile(curFile.absoluteFilePath());
-					msleep(100);
-				}
-			}
-			else if(curFile.isDir())//dir
-			{
-				QDir dirTemp(curFile.filePath());
-				QFileInfoList fileList1 = dirTemp.entryInfoList(QDir::Dirs | QDir::Files | QDir::Readable | QDir::Hidden | QDir::NoDotAndDotDot);
-				for(int j = 0; j < fileList1.size(); ++j)
-				{
-					if(!(fileList.contains(fileList1[j])))
-					{
-						fileList.append(fileList1[j]);
-					}
-				}
-			}
+            curFile=fileList[i];
+            if(curFile.isFile())//file
+            {
+                if (!_stop)
+                {
+                    emit signal_addFile(curFile.absoluteFilePath());
+                    msleep(100);
+                }
+            }
+            else if(curFile.isDir())//dir
+            {
+                QDir dirTemp(curFile.filePath());
+                QFileInfoList fileList1 = dirTemp.entryInfoList(QDir::Dirs | QDir::Files | QDir::Readable | QDir::Hidden | QDir::NoDotAndDotDot);
+                for(int j = 0; j < fileList1.size(); ++j)
+                {
+                    if(!(fileList.contains(fileList1[j])))
+                    {
+                        fileList.append(fileList1[j]);
+                    }
+                }
+            }
 
-			//关键步骤
-			fileList.removeAt(i);
-		}
-	}
+            //关键步骤
+            fileList.removeAt(i);
+        }
+    }
 }
 
 void WorkThread::setDataPath(const QString &dataPath)
 {
-	_dataPath = dataPath;
+    _dataPath = dataPath;
 }
 
 void WorkThread::setStop(bool stop)
 {
-	_stop = stop;
+    _stop = stop;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -112,15 +112,15 @@ void WorkThread::setStop(bool stop)
 FileClassifyDlg::FileClassifyDlg(QWidget *parent /* = 0 */)
 : QFrame(parent)
 {
-	ui.setupUi(this);
+    ui.setupUi(this);
 
-	_currentIndex = QModelIndex();
-	_currentRowCount = 0;
+    _currentIndex = QModelIndex();
+    _currentRowCount = 0;
 
     initFileTypeMap();
 
-	QStringList header;
-	header << QString::fromLocal8Bit("文件名") << QString::fromLocal8Bit("修改时间") << QString::fromLocal8Bit("大小") << QString::fromLocal8Bit("路径");
+    QStringList header;
+    header << QString::fromLocal8Bit("文件名") << QString::fromLocal8Bit("修改时间") << QString::fromLocal8Bit("大小") << QString::fromLocal8Bit("路径");
 
     FileInfoModel *model = new FileInfoModel;
     if (model)
@@ -140,51 +140,51 @@ FileClassifyDlg::FileClassifyDlg(QWidget *parent /* = 0 */)
         ui.treeView->setModel(_fileTypeModel);
     }
 
-	ui.tableView->setColumnWidth(0, 220);
-	ui.tableView->setColumnWidth(1, 130);
-	ui.tableView->setColumnWidth(2, 80);
-	ui.tableView->setItemDelegate(new NoFocusDelegate);
-	ui.tableView->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-	ui.treeView->setItemDelegate(new NoFocusDelegate);
-	ui.treeView->header()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    ui.tableView->setColumnWidth(0, 220);
+    ui.tableView->setColumnWidth(1, 130);
+    ui.tableView->setColumnWidth(2, 80);
+    ui.tableView->setItemDelegate(new NoFocusDelegate);
+    ui.tableView->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    ui.treeView->setItemDelegate(new NoFocusDelegate);
+    ui.treeView->header()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
-	connect(ui.tableView->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_sliderValueChanged(int)));
-	connect(&_thread, SIGNAL(signal_addFile(const QString &)), this, SLOT(slot_addFile(const QString &)));
+    connect(ui.tableView->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_sliderValueChanged(int)));
+    connect(&_thread, SIGNAL(signal_addFile(const QString &)), this, SLOT(slot_addFile(const QString &)));
 }
 
 FileClassifyDlg::~FileClassifyDlg()
 {
-	_thread.setStop(true);
-	_thread.exit();
-	_thread.wait();
+    _thread.setStop(true);
+    _thread.exit();
+    _thread.wait();
 }
 
 QString FileClassifyDlg::formatFileSize(__int64 size)
 {
-	double dFileSize = size;
-	wchar_t wzFileSize[MAX_PATH] = {0};
+    double dFileSize = size;
+    wchar_t wzFileSize[MAX_PATH] = {0};
 
-	if (dFileSize)
-	{
-		if (dFileSize < 1024)
-		{
-			StringCbPrintfW(wzFileSize, sizeof(wzFileSize), L"%.2lfB", dFileSize);
-		}
-		else if(dFileSize < 1024 * 1024)
-		{
-			StringCbPrintfW(wzFileSize, sizeof(wzFileSize), L"%.2lfKB", dFileSize / 1024);
-		}
-		else if(dFileSize < 1024 * 1024 * 1024)
-		{
-			StringCbPrintfW(wzFileSize, sizeof(wzFileSize), L"%.2lfMB", dFileSize / 1024 / 1024);
-		}
-		else
-		{
-			StringCbPrintfW(wzFileSize, sizeof(wzFileSize), L"%.2lfGB", dFileSize / 1024 / 1024 / 1024);
-		}
-	}
+    if (dFileSize)
+    {
+        if (dFileSize < 1024)
+        {
+            StringCbPrintfW(wzFileSize, sizeof(wzFileSize), L"%.2lfB", dFileSize);
+        }
+        else if(dFileSize < 1024 * 1024)
+        {
+            StringCbPrintfW(wzFileSize, sizeof(wzFileSize), L"%.2lfKB", dFileSize / 1024);
+        }
+        else if(dFileSize < 1024 * 1024 * 1024)
+        {
+            StringCbPrintfW(wzFileSize, sizeof(wzFileSize), L"%.2lfMB", dFileSize / 1024 / 1024);
+        }
+        else
+        {
+            StringCbPrintfW(wzFileSize, sizeof(wzFileSize), L"%.2lfGB", dFileSize / 1024 / 1024 / 1024);
+        }
+    }
 
-	return QString::fromUtf16(wzFileSize);
+    return QString::fromUtf16(wzFileSize);
 }
 
 void FileClassifyDlg::initFileTypeMap()
@@ -224,10 +224,10 @@ void FileClassifyDlg::initFileTypeMap()
 
 void FileClassifyDlg::slot_addFile(const QString &file)
 {
-	if (!QFile::exists(file))
-	{
-		return;
-	}
+    if (!QFile::exists(file))
+    {
+        return;
+    }
 
     QString type, compareType, text;
     ObjectItem *item = NULL;
@@ -237,29 +237,29 @@ void FileClassifyDlg::slot_addFile(const QString &file)
     quint32 num = 0;
     QRegExp rx("\\((\\d+)\\)");
 
-	QFileInfo fileInfo(file);
-	quint64 fileSize = fileInfo.size();
+    QFileInfo fileInfo(file);
+    quint64 fileSize = fileInfo.size();
 
-	//get file suffix
-	FileInfoStruct fileInfoStruct;
-	fileInfoStruct.strFileNameNoPath = fileInfo.fileName();
-	fileInfoStruct.strFileNameWithPath = fileInfo.absoluteFilePath().replace(QChar('/'), QChar('\\'));
-	if (fileInfoStruct.strFileNameWithPath.endsWith("tar.gz"))
-	{
-		fileInfoStruct.strFileSuffix = fileInfo.completeSuffix();
-	}
-	else
-	{
-		fileInfoStruct.strFileSuffix = fileInfo.suffix();
-	}
+    //get file suffix
+    FileInfoStruct fileInfoStruct;
+    fileInfoStruct.strFileNameNoPath = fileInfo.fileName();
+    fileInfoStruct.strFileNameWithPath = fileInfo.absoluteFilePath().replace(QChar('/'), QChar('\\'));
+    if (fileInfoStruct.strFileNameWithPath.endsWith("tar.gz"))
+    {
+        fileInfoStruct.strFileSuffix = fileInfo.completeSuffix();
+    }
+    else
+    {
+        fileInfoStruct.strFileSuffix = fileInfo.suffix();
+    }
 
     if (fileInfoStruct.strFileSuffix.isEmpty())
     {
         fileInfoStruct.strFileSuffix = QString::fromLocal8Bit("无后缀名");
     }
 
-	fileInfoStruct.strFileSize = formatFileSize(fileSize);
-	fileInfoStruct.strFileLastModifiedTime = fileInfo.lastModified().toString("yyyy/MM/dd hh:mm:ss");
+    fileInfoStruct.strFileSize = formatFileSize(fileSize);
+    fileInfoStruct.strFileLastModifiedTime = fileInfo.lastModified().toString("yyyy/MM/dd hh:mm:ss");
 
     //model of total files
     if (_fileInfoModelMap.end() != _fileInfoModelMap.find("*.*"))
@@ -454,40 +454,40 @@ void FileClassifyDlg::on_treeView_clicked(const QModelIndex &index)
 
 void FileClassifyDlg::on_tableView_doubleClicked(const QModelIndex &index)
 {
-	if (!index.isValid())
-	{
-		return;
-	}
-	
+    if (!index.isValid())
+    {
+        return;
+    }
+    
     FileInfoModel *current_model = (FileInfoModel*)(ui.tableView->model());
-	if (!current_model)
-	{
-		return;
-	}
+    if (!current_model)
+    {
+        return;
+    }
 
     FileInfoItem *item = current_model->item(index.row(), 3);
-	if (!item)
-	{
-		return;
-	}
+    if (!item)
+    {
+        return;
+    }
 
     QString filePath = item->text;
-	if (QFile::exists(filePath))
-	{
-		filePath = "\"" + filePath + "\"";
-		ShellExecuteW(NULL, L"open", filePath.utf16(), NULL, NULL, SW_NORMAL);
-	}
-	else
-	{
-		QMessageBox::information(0, QString::fromLocal8Bit("提示"), QString::fromLocal8Bit("文件不存在！"));
-	}
+    if (QFile::exists(filePath))
+    {
+        filePath = "\"" + filePath + "\"";
+        ShellExecuteW(NULL, L"open", filePath.utf16(), NULL, NULL, SW_NORMAL);
+    }
+    else
+    {
+        QMessageBox::information(0, QString::fromLocal8Bit("提示"), QString::fromLocal8Bit("文件不存在！"));
+    }
 }
 
 void FileClassifyDlg::Update()
 {
-	_thread.setStop(true);
-	_thread.exit();
-	_thread.wait();
+    _thread.setStop(true);
+    _thread.exit();
+    _thread.wait();
 
     for(QMap<QString, FileInfoModel*>::iterator iter = _fileInfoModelMap.begin();
         iter != _fileInfoModelMap.end();
@@ -505,92 +505,92 @@ void FileClassifyDlg::Update()
         }
     }
 
-	ui.tableView->setFont(QString::fromLocal8Bit("微软雅黑"));
-	QString dataPath = "D:\\software";
-	_thread.setStop(false);
-	_thread.setDataPath(dataPath);
-	_thread.start();
+    ui.tableView->setFont(QString::fromLocal8Bit("微软雅黑"));
+    QString dataPath = "D:\\software";
+    _thread.setStop(false);
+    _thread.setDataPath(dataPath);
+    _thread.start();
 }
 
 void FileClassifyDlg::slot_pushButton_clicked()
 {
     FileInfoModel *current_model = static_cast<FileInfoModel*>(ui.tableView->model());
-	if (!current_model)
-	{
-		return;
-	}
+    if (!current_model)
+    {
+        return;
+    }
 
-	QPushButton *button = qobject_cast<QPushButton*>(sender());
-	if (!button)
-	{
-		return;
-	}
+    QPushButton *button = qobject_cast<QPushButton*>(sender());
+    if (!button)
+    {
+        return;
+    }
 
-	int currentRow = ui.tableView->rowAt(button->y());
-	if (-1 == currentRow)
-	{
-		return;
-	}
+    int currentRow = ui.tableView->rowAt(button->y());
+    if (-1 == currentRow)
+    {
+        return;
+    }
 
-	QModelIndex index = current_model->index(currentRow, 0, QModelIndex());
-	ui.tableView->setCurrentIndex(index);
+    QModelIndex index = current_model->index(currentRow, 0, QModelIndex());
+    ui.tableView->setCurrentIndex(index);
 
-	if (!current_model->item(currentRow, 3))
-	{
-		return;
-	}
+    if (!current_model->item(currentRow, 3))
+    {
+        return;
+    }
 
-	QString filePath = current_model->data(index).toString();
-	if (QFile::exists(filePath))
-	{
-		QString cmd = "/select,\"" + filePath + "\"";
-		ShellExecuteW(NULL, L"open", L"explorer.exe", cmd.utf16(), NULL, SW_SHOWNORMAL);
-	}
-	else
-	{
-		QMessageBox::information(0, QString::fromLocal8Bit("提示"), QString::fromLocal8Bit("文件不存在！"));
-	}
+    QString filePath = current_model->data(index).toString();
+    if (QFile::exists(filePath))
+    {
+        QString cmd = "/select,\"" + filePath + "\"";
+        ShellExecuteW(NULL, L"open", L"explorer.exe", cmd.utf16(), NULL, SW_SHOWNORMAL);
+    }
+    else
+    {
+        QMessageBox::information(0, QString::fromLocal8Bit("提示"), QString::fromLocal8Bit("文件不存在！"));
+    }
 }
 
 void FileClassifyDlg::slot_sliderValueChanged(int value)
 {
     FileInfoModel *current_model = static_cast<FileInfoModel*>(ui.tableView->model());
-	if (!current_model)
-	{
-		return;
-	}
+    if (!current_model)
+    {
+        return;
+    }
 
-	if (current_model == _fileInfoModelMap["*.*"])
-	{
-		return;
-	}
+    if (current_model == _fileInfoModelMap["*.*"])
+    {
+        return;
+    }
 
-	//滚动至每页倒数50行时加载下一页
-	if (_currentRowCount > 50)
-	{
-		if (value <= _currentRowCount - 50)
-		{
-			return;
-		}
-	}
+    //滚动至每页倒数50行时加载下一页
+    if (_currentRowCount > 50)
+    {
+        if (value <= _currentRowCount - 50)
+        {
+            return;
+        }
+    }
 
-	int totalRowCount = current_model->rowCount();	
-	if (totalRowCount == _currentRowCount)
-	{
-		return;
-	}
+    int totalRowCount = current_model->rowCount();    
+    if (totalRowCount == _currentRowCount)
+    {
+        return;
+    }
 
-	qDebug() << QString("total row : %1	current row : %2").arg(totalRowCount).arg(value);
+    qDebug() << QString("total row : %1    current row : %2").arg(totalRowCount).arg(value);
 
-	int count = 0;
-	if (totalRowCount - _currentRowCount > 100)
-	{
-		count = _currentRowCount + 100; 
-	}
-	else
-	{
-		count = totalRowCount;
-	}
+    int count = 0;
+    if (totalRowCount - _currentRowCount > 100)
+    {
+        count = _currentRowCount + 100; 
+    }
+    else
+    {
+        count = totalRowCount;
+    }
 
-	_currentRowCount = count;
+    _currentRowCount = count;
 }

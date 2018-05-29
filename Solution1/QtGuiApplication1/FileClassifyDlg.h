@@ -1,4 +1,4 @@
-#ifndef FILECLASSIFYFLG_H
+Ôªø#ifndef FILECLASSIFYFLG_H
 #define FILECLASSIFYFLG_H
 
 
@@ -13,79 +13,79 @@
 #include "ui_FileClassifyDlg.h"
 
 
-//œﬂ≥Ã
+//Á∫øÁ®ã
 class WorkThread : public QThread
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	explicit WorkThread(QObject *parent = 0);
-	~WorkThread();
-	void setDataPath(const QString &dataPath);
-	void setStop(bool stop);
+    explicit WorkThread(QObject *parent = 0);
+    ~WorkThread();
+    void setDataPath(const QString &dataPath);
+    void setStop(bool stop);
 
 protected:
-	void run();
+    void run();
 
 private:
-	bool _stop;
-	QString _dataPath;
-	void travelFile();
+    bool _stop;
+    QString _dataPath;
+    void travelFile();
 
 signals:
-	void signal_addFile(const QString &file);
+    void signal_addFile(const QString &file);
 };
 
-/*Œƒº˛–≈œ¢Ω·ππ*/
+/*Êñá‰ª∂‰ø°ÊÅØÁªìÊûÑ*/
 struct FileInfoStruct 
 {
-    QString	strFileNameNoPath;
-    QString	strFileSuffix;
-    QString	strFileLastModifiedTime;
-    QString	strFileSize;
-    QString	strFileNameWithPath;
+    QString strFileNameNoPath;
+    QString strFileSuffix;
+    QString strFileLastModifiedTime;
+    QString strFileSize;
+    QString strFileNameWithPath;
 };
 
-//¥∞ÃÂ
+//Á™ó‰Ωì
 class FileInfoModel;
 class FileTypeModel;
 class FileClassifyDlg : public QFrame
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	FileClassifyDlg(QWidget *parent = 0);
-	~FileClassifyDlg();
-	void Update();
+    FileClassifyDlg(QWidget *parent = 0);
+    ~FileClassifyDlg();
+    void Update();
 
 private:
-	Ui::FileClassifyDlg ui;
-	WorkThread _thread;
-	int _currentRowCount;
+    Ui::FileClassifyDlg ui;
+    WorkThread _thread;
+    int _currentRowCount;
     QModelIndex _currentIndex;
-
-	// <key, value> = <file suffix, file info model>
+    
+    // <key, value> = <file suffix, file info model>
     QMap<QString, FileInfoModel*> _fileInfoModelMap;
     FileTypeModel *_fileTypeModel;
 
     // <key, value> = <file suffix, file type>
-    // eg. <.txt, Œƒ±æŒƒº˛>
+    // eg. <.txt, ÊñáÊú¨Êñá‰ª∂>
     QMap<QString, QString> _fileTypeMap;
 
     // <key, value> = <file type, row>
-    // eg.<Œƒ±æŒƒº˛, 0>
+    // eg.<ÊñáÊú¨Êñá‰ª∂, 0>
     QMap<QString, int> _fileTypeRowMap;
 
 private:
-	QString formatFileSize(__int64 size);
+    QString formatFileSize(__int64 size);
     void initFileTypeMap();
 
 public slots:
-	void slot_addFile(const QString &file);
-	void slot_pushButton_clicked();
-	void on_treeView_clicked(const QModelIndex &index);
-	void on_tableView_doubleClicked(const QModelIndex &index);
-	void slot_sliderValueChanged(int value);
+    void slot_addFile(const QString &file);
+    void slot_pushButton_clicked();
+    void on_treeView_clicked(const QModelIndex &index);
+    void on_tableView_doubleClicked(const QModelIndex &index);
+    void slot_sliderValueChanged(int value);
 };
 
 #endif //FILECLASSIFYFLG_H
